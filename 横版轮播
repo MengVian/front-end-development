@@ -1,0 +1,158 @@
+# front-end-development
+前端开发功能代码
+横版轮播
+------------------------------------------------------------【HTML】------------------------------------------------------------------------------------
+<html>
+<head>
+	<meta charset="utf-8">
+	<style type="text/css">
+		*{margin: 0;padding: 0;text-decoration: none;}
+		body{padding: 20px;}
+		#container{width: 240px; height: 240px; border:1px solid rgb(104,213,200); position: relative; overflow: hidden;}
+		#list{width: 1440px; height: 240px; position: absolute; z-index: 1;}
+		#list img{float: left;}
+		#buttons{position: absolute; height: 7px; width: 60px; z-index: 2; bottom: 10px; left: 95px;}
+		#buttons span{cursor: pointer; float: left; border: 1px solid #fff; width: 7px; height: 8px; border-radius: 50%; background: #333; margin-right: 5px;}
+		#buttons .on{background-color: rgb(104,213,209);}/*小圆点颜色*/
+		.arrow{cursor: pointer; display: none; line-height: 34px; text-align: center; font-size: 30px; font-weight: bold; width: 35px; height: 35px; position: absolute; z-index: 2; top: 100px; background-color: rgba(255,255,255,.4); color: #fff;}
+		.arrow:hover {background-color: rgba(255,255,255,.6); color: #fff}
+		#container:hover .arrow{display: block;}
+		#prev{left: 10px;}
+		#next{right: 10px;}
+	</style>
+	<script type="text/javascript" src="js.js"></script>
+</head>
+<body>
+	<div id="container">
+		<div id="list" style="left:-240px;"><!-- 根据图片大小调整 -->
+			<img src="img/4.jpg" alt="">
+			<img src="img/1.jpg" alt="">
+			<img src="img/2.jpg" alt="">
+			<img src="img/3.jpg" alt="">
+			<img src="img/4.jpg" alt="">
+			<img src="img/1.jpg" alt="">
+		</div>
+		<div id="buttons">
+			<span index="1" class="on"></span>
+			<span index="2"></span>
+			<span index="3"></span>
+			<span index="4"></span>
+		</div>
+		<a href="javascript:;" id="prev" class="arrow">&lt;</a>
+		<a href="javascript:;" id="next" class="arrow">&gt;</a>
+	</div>
+</body>
+</html>
+
+------------------------------------------------------------【JS】------------------------------------------------------------------------------------
+
+window.onload = function () {
+	var container = document.getElementById('container');
+	var list = document.getElementById('list');
+	var buttons = document.getElementById('buttons').getElementsByTagName('span');
+	var prev = document.getElementById('prev');
+	var next = document.getElementById('next');
+	var index = 1;
+	var animated = false;
+	var timer;
+	
+	
+	//小圆点随图片切换亮起
+	function showButton(){
+		for (var i = 0; i < buttons.length; i++) {
+			if(buttons[i].className == 'on'){
+				buttons[i].className = '';
+				break;
+			}
+		}
+		buttons[index - 1].className = 'on';
+	}
+
+	function animate(x){
+		animated = true;
+		var newLeft = parseInt(list.style.left) + x ;
+		var time = 200;
+		var interval = 10;
+		var speed = x/(time/interval);
+	
+
+		function go(){
+			if ( (speed < 0 && parseInt(list.style.left) > newLeft) || (speed > 0 && parseInt(list.style.left) < newLeft) ) {
+				list.style.left = parseInt(list.style.left) + speed + 'px';
+				setTimeout(go, interval);
+			}
+			else{
+				animated = false;
+				list.style.left = newLeft +'px';
+	
+			 	if(newLeft > -240){ //翻到假最后一张
+			 		list.style.left = -960 + 'px';
+			 	}
+			 	if(newLeft < -960){ //翻到假第一张
+			 		list.style.left = -240 + 'px';
+			 	}
+			}
+		}
+		go();
+	}
+
+	//自动切换
+	function play(){
+		timer = setInterval(function () {
+			next.onclick();
+		},3000);
+	}
+
+	function stop(){
+		clearInterval(timer);
+	}
+	
+	next.onclick = function(){
+		if (index == 4) {
+			index = 1;
+		}
+		else{
+			index += 1;
+		}
+		
+		showButton();
+		if(!animated){
+			animate(-240);
+		}
+	}
+	prev.onclick = function(){
+		if (index == 1) {
+			index = 5;
+		}
+		else{
+			index -= 1;
+		}
+		showButton();
+		if(!animated){
+			animate(240);
+		}
+		
+	}
+
+	for (var i = 0; i < buttons.length; i++) {
+		buttons[i].onclick = function(){
+			if (this.className == 'on') {
+				return;
+			}
+			var myIndex = parseInt(this.getAttribute('index'));
+			var x = -240 * (myIndex - index);
+			if(!animated){
+				animate(x);
+			}
+			index = myIndex;
+			showButton();
+			
+			
+		}     
+	}
+
+	container.onmouseover = stop;
+	container.onmouseout = play;
+	
+	play();
+}
