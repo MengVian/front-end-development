@@ -1,0 +1,111 @@
+# front-end-development
+前端开发功能代码
+手风琴
+
+-----------------------------------------------------【HTML】---------------------------------------------------
+
+<html>
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="demo.css">
+	<script type="text/javascript" src="demo.js"></script>
+</head>
+<body>
+	<div id="subject" class="wrapper">
+		<ul>
+			<li class="big">
+				<a href="#link1">
+					<img src="img/1.jpg">
+					<div class="info">
+						<h3 style="color:#f62368">Spring</h3>
+						<p>is coming</p>
+						<p class="page"><strong>1</strong><i>P</i></p>
+					</div>
+					<i class="line"></i>
+					<i class="mask"></i>
+				</a>
+			</li>
+			<li>
+				<a href="#link1">
+					<img src="img/2.jpg">
+					<div class="info">
+						<h3 style="color:#f62368">Spring</h3>
+						<p>is coming</p>
+						<p class="page"><strong>1</strong><i>P</i></p>
+					</div>
+					<i class="line"></i>
+					<i class="mask"></i>
+				</a>
+			</li>
+			<li>
+				<a href="#link1">
+					<img src="img/3.jpg">
+					<div class="info">
+						<h3 style="color:#f62368">Spring</h3>
+						<p>is coming</p>
+						<p class="page"><strong>1</strong><i>P</i></p>
+					</div>
+					<i class="line"></i>
+					<i class="mask"></i>
+				</a>
+			</li>
+			<li>
+				<a href="#link1">
+					<img src="img/4.jpg">
+					<div class="info">
+						<h3 style="color:#f62368">Spring</h3>
+						<p>is coming</p>
+						<p class="page"><strong>1</strong><i>P</i></p>
+					</div>
+					<i class="mask"></i>
+				</a>
+			</li>
+		</ul>
+	</div>
+</body>
+</html>
+
+------------------------------------------------------【JS】---------------------------------------------------
+
+window.onload=function(){
+ 	var outer=document.getElementById('subject');//最外层的盒子
+	var list=outer.getElementsByTagName('li');
+
+  	for(var i=0;i<list.length;i++){
+  	 	list[i].onmouseover=function(){
+
+   		for(var i=0;i<list.length;i++){
+   			list[i].className=''; 
+   		}
+
+   		this.className='big';
+   		}
+   	}
+}
+
+-----------------------------------------------------【CSS】---------------------------------------------------
+
+*{margin: 0;padding: 0;}
+ul,ol {list-style: none;}
+
+.wrapper{width: 800px;height: 230px;	}
+
+.wrapper li {width: 160px; height: 230px; float: left; overflow: hidden;}/*折叠时盒子大小*/
+.wrapper li a{display: block; height: 230px; width:156px; position: relative;overflow: hidden; text-decoration: none;}
+.wrapper img{ position: absolute; bottom: 0; right: 0; height: 160px; width: 160px;}/*折叠时图片大小*/
+.wrapper .info{position: absolute; top: 0; left: 0; width: 100px; padding: 4px 10px;}
+.wrapper .info h3{font-size: 14px; font-weight: 700;}
+.wrapper .info p{color:#f62368; font-size: 12px; height: 22px; line-height: 22px; width: 136px; overflow: hidden;}
+.wrapper .info.price{font-size: 14px; font-style: italic; color: #f62368; height: 35px;}
+.wrapper .line{position: absolute; right: 0; width: 0;height: 320px; border: 1px dashed #cacaca;}
+.wrapper .mask{position: absolute; top: 0; left: 0; height: 230px; width: 160px; opacity: 0; background: #000;}
+.wrapper:hover .mask{opacity: 0.15;}
+
+.wrapper ul * {transition:all linear 0.3s;}/*折叠动画效果*/
+.wrapper li.big,li.big a{width: 320px;}/*展开时盒子大小*/
+.wrapper li.big img{width:320px; height: 320px; right: -10px; bottom: -10px; }/*展开时图片大小*/
+.wrapper li.big .info{width: 150px;}
+.wrapper li.big h3{font-size: 18px;}
+.wrapper li.big p{font-size: 14px; width: 166px;}
+.wrapper li.big p.price{font-size:  16px; padding-top: 7px;}
+.wrapper li.big a:hover .mask{opacity: 0;}
